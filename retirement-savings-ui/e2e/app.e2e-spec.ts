@@ -1,6 +1,6 @@
 import { RetirementSavingsUiPage } from './app.po';
 
-describe('retirement-savings-ui App', function() {
+describe('retirement-savings-ui App', () => {
   let page: RetirementSavingsUiPage;
 
   beforeEach(() => {
