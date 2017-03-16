@@ -3,6 +3,7 @@
 # ----------------------
 flask
 flask-mysql
+flask-cors
 
 # ----------------------
 # Production Server

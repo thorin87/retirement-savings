@@ -11,11 +11,12 @@ import { ApiService } from './api.service';
 })
 export class AppComponent implements OnInit {
 
-  testData : string;
+  testData : any[];
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
+    
     this.apiService.getTestData().first().subscribe(response => this.testData = response);
   }
 }

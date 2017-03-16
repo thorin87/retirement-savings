@@ -1,16 +1,37 @@
 from flask import Flask
 from flask import Response
+from flask import jsonify
+from flask_cors import CORS, cross_origin
 from flask.ext.mysql import MySQL
 
+def decimal_default(obj):
+    if isinstance(obj, decimal.Decimal):
+        return float(obj)
+    raise TypeError
+
+'''
+class CustomJSONEncoder(JSONEncoder):
+    def default(self, obj):
+        try:
+        if isinstance(obj, decimal.Decimal):
+            return float(obj)
+        except TypeError:
+            pass
+        else:
+            return list(iterable)
+        return JSONEncoder.default(self, obj)
+'''
 app = Flask(__name__)
+CORS(app)
+#app.json_encoder = CustomJSONEncoder
 mysql = MySQL()
  
-import database.config as cfg
+import databaseconfig as cfg
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = mysql['user']
-app.config['MYSQL_DATABASE_PASSWORD'] = mysql['password']
-app.config['MYSQL_DATABASE_DB'] = mysql['db']
-app.config['MYSQL_DATABASE_HOST'] = mysql['host']
+app.config['MYSQL_DATABASE_USER'] = cfg.mysql['user']
+app.config['MYSQL_DATABASE_PASSWORD'] = cfg.mysql['passwd']
+app.config['MYSQL_DATABASE_DB'] = cfg.mysql['db']
+app.config['MYSQL_DATABASE_HOST'] = cfg.mysql['host']
 mysql.init_app(app)
 
 conn = mysql.connect()
@@ -29,10 +50,9 @@ def testdata():
 
 @app.route("/dbtest")
 def fetchfromdb():
-    query_string = "SELECT * FROM rate WHERE Date > '2015-01-01'" 
+    query_string = "SELECT Date, CAST(VALUE * 100 AS INT) FROM rate WHERE Date > '2015-01-01' AND FundId = 1" 
     cursor.execute(query_string)
-    data = cursor.fetchall()
-    return data
+    return jsonify(data=cursor.fetchall())
 
 if __name__ == '__main__':
     app.run(debug=True)

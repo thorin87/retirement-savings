@@ -12,13 +12,13 @@ export class ApiService {
   constructor(private http : Http) { }
 
   getTestData() : Observable<any> {
-    return this.http.get(`${this.baseUrl}/test`)
+    return this.http.get(`${this.baseUrl}/dbtest`)
     .map(this.extractData)
     .catch(this.handleError);
   }
 
   private extractData(res: Response) {
-    debugger;
+    //debugger;
     let body = res.json();
     return body.data || { };
   }
