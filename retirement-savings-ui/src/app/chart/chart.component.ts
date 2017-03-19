@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Chart, ChartSeries } from "./chart.model";
 
 @Component({
   selector: 'app-chart',
@@ -7,9 +8,13 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ChartComponent implements OnInit {
 
-  rawData : string;
-
-  @Input() chartData;
+  @Input() set chartData(value: any[]){
+    if(value != null){
+      let chart: Chart = this.convertApiResultToChartData(value);
+      this.lineChartData = chart.series;
+      this.lineChartLabels = chart.labels;
+    }
+  }
 
   public lineChartData:Array<any> = [
     {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
@@ -23,6 +28,23 @@ public lineChartType = "line";
   constructor() { }
 
   ngOnInit() {
+  }
+
+  convertApiResultToChartData(apiResult: any[]) : Chart {
+    let result = new Chart();
+    result.labels = [];
+
+    let chartSeries = new ChartSeries();
+    chartSeries.label = "test";
+    chartSeries.data = []
+    apiResult.forEach(element => {
+      chartSeries.data[chartSeries.data.length] = element[1];
+      result.labels[result.labels.length] = element[0];
+    });
+    result.series = [];
+    result.series.push(chartSeries);
+    debugger;
+    return result;
   }
 
 }

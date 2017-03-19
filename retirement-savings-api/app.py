@@ -2,7 +2,7 @@ from flask import Flask
 from flask import Response
 from flask import jsonify
 from flask_cors import CORS, cross_origin
-from flask.ext.mysql import MySQL
+from flaskext.mysql import MySQL
 
 def decimal_default(obj):
     if isinstance(obj, decimal.Decimal):
