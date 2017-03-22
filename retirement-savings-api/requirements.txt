@@ -2,7 +2,7 @@
 # Flask
 # ----------------------
 flask
-flask-mysql
+flask-mysqldb
 flask-cors
 
 # ----------------------
