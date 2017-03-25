@@ -8,7 +8,7 @@ import { ChartComponent } from './chart/chart.component';
 
 import { ApiService } from './api.service';
 
-import { ChartsModule } from 'ng2-charts';
+import { ChartModule } from 'angular2-highcharts';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ import { ChartsModule } from 'ng2-charts';
     BrowserModule,
     FormsModule,
     HttpModule,
-    ChartsModule
+    ChartModule.forRoot(require('highcharts/highstock'))
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]

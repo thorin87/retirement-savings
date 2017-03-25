@@ -5,6 +5,6 @@ export class Chart {
 }
 
 export class ChartSeries{
-     public data: Array<number>;
-     public label: string;
+     public data: Array<any>;
+     public name: string;
 }
