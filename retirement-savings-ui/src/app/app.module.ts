@@ -38,6 +38,9 @@ import { ChartModule } from 'angular2-highcharts';
     ApiService,
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
+  exports: [
+    ChartComponent
+  ], 
   bootstrap: [AppComponent]
 })
 export class AppModule { }

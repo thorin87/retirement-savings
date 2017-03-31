@@ -15,7 +15,7 @@ declare var $:any;
 })
 export class AppComponent implements OnInit {
 
-  testData : any[];
+  testData;
 
   constructor(private apiService: ApiService, location: PlatformLocation) { 
     location.onPopState(() => {
@@ -31,13 +31,4 @@ export class AppComponent implements OnInit {
     $.getScript('../assets/js/initMenu.js');
     this.apiService.getTestData().first().subscribe(response => this.testData = response);
   }
-
-  public isMaps(path){
-        if(path == window.location.pathname){
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
 }

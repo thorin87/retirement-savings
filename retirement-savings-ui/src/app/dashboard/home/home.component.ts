@@ -1,22 +1,22 @@
-import { Component, OnInit, trigger, state, style, transition, animate } from '@angular/core';
-import initDemo = require('../../../assets/js/charts.js');
+import { Component, OnInit, trigger, state, style, transition, animate, Input } from '@angular/core';
+//import initDemo = require('../../../assets/js/charts.js');
+import { ApiService } from "../../api.service";
 
 declare var $:any;
 
 @Component({
     selector: 'home-cmp',
     moduleId: module.id,
-    templateUrl: 'home.component.html'
+    templateUrl: 'home.component.html',
+    styleUrls: ['./home.component.css']
 })
 
 export class HomeComponent implements OnInit{
-    ngOnInit(){
-        // $('[data-toggle="checkbox"]').each(function () {
-        //     if($(this).data('toggle') == 'switch') return;
-        //
-        //     var $checkbox = $(this);
-        //     $checkbox.checkbox();
-        // });
-        initDemo();
-    }
+    public dataFromApi: any;
+
+    constructor(private apiService: ApiService) { }
+
+  ngOnInit(): void {
+    this.apiService.getTestData().first().subscribe(response => this.dataFromApi = response);
+  }
 }
