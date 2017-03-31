@@ -1,1 +1,15 @@
-<app-chart [chartData]="testData"></app-chart>
+<!--<app-chart [chartData]="testData"></app-chart>
+Dane z api: {{testData}}-->
+<div class="wrapper">
+    <div class="sidebar" data-color='red' data-image="">
+        <sidebar-cmp></sidebar-cmp>
+        <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-4.jpg)"></div>
+    </div>
+    <div class="main-panel">
+        <navbar-cmp></navbar-cmp>
+        <dashboard-cmp></dashboard-cmp>
+        <div *ngIf="isMaps('/maps')">
+            <footer-cmp></footer-cmp>
+        </div>
+    </div>
+</div>

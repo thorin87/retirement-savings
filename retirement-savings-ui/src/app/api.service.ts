@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ApiService {
 
+  //TODO: do wydzielenia do zewnętrznego configa
   private baseUrl: string = 'http://localhost:5000';
 
   constructor(private http : Http) { }

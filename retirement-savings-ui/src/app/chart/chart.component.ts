@@ -15,6 +15,7 @@ export class ChartComponent {
     console.log('set chartdata', value);
     if(value != null){
       //let chartTmp = this.convertApiResultToChartData(value);
+      debugger;
       let chartTmp = this.convertApiResultToCharSeries(value);
       this.displayChart(chartTmp);
       //this.chartSubject.next(chartTmp);
@@ -42,11 +43,14 @@ export class ChartComponent {
   convertApiResultToCharSeries(apiResult: any[]) : ChartSeries {
     let chartSeries = new ChartSeries();
     chartSeries.name = "NN (L) Stabilny Globalnej Alokacji (K)";
+    chartSeries.data = apiResult;
+    /*
     chartSeries.data = apiResult.map(element => {
       let date = Date.parse(element[0]);
       let value = +element[1];
       return [date, value];
     });
+    */
     return chartSeries;
   }
 
