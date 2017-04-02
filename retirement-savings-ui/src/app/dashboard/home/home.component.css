@@ -4,3 +4,6 @@
 .col-lg-3{
     width: 33.33%
 }
+.card-header.card-chart{
+    padding: 5px;
+}

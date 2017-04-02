@@ -20,8 +20,7 @@ import { ChartModule } from 'angular2-highcharts';
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    ChartComponent
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -35,12 +34,8 @@ import { ChartModule } from 'angular2-highcharts';
     ChartModule.forRoot(require('highcharts/highstock'))
   ],
   providers: [
-    ApiService,
-    {provide: LocationStrategy, useClass: HashLocationStrategy}
+    ApiService
   ],
-  exports: [
-    ChartComponent
-  ], 
   bootstrap: [AppComponent]
 })
 export class AppModule { }

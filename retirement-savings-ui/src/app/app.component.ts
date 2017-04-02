@@ -15,8 +15,6 @@ declare var $:any;
 })
 export class AppComponent implements OnInit {
 
-  testData;
-
   constructor(private apiService: ApiService, location: PlatformLocation) { 
     location.onPopState(() => {
             // $('.sidebar-wrapper .nav-container div').removeClass('.moving-tab');
@@ -29,6 +27,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     $.getScript('../assets/js/material-dashboard.js');
     $.getScript('../assets/js/initMenu.js');
-    this.apiService.getTestData().first().subscribe(response => this.testData = response);
+    //this.apiService.getTestData().first().subscribe(response => this.testData = response);
   }
 }

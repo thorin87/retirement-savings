@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { TableData } from "./table.model";
 
 @Component({
     selector: 'table-cmp',
@@ -6,4 +7,13 @@ import { Component } from '@angular/core';
     templateUrl: 'table.component.html'
 })
 
-export class TableComponent{}
+export class TableComponent{
+    @Input()
+    title: string;
+
+    @Input()
+    subtitle: string;
+
+    @Input()
+    data: TableData;
+}
