@@ -4,6 +4,7 @@ from flask import request
 from flask import jsonify
 from flask_cors import CORS, cross_origin
 from flask_mysqldb import MySQL
+import uuid
 
 app = Flask(__name__)
 
@@ -38,6 +39,17 @@ def fetchfromdb():
     cursor = mysql.connection.cursor()
     cursor.execute(query_string)
     return jsonify(data=cursor.fetchall())
+
+@app.route("/token", methods=['GET', 'POST'])
+def token():
+    if request.method == 'POST' and 'token' in request.json:
+        query_string = "INSERT INTO user (Token, Admin) VALUES ('{0}', 0)".format(request.json['token'])
+        cursor = mysql.connection.cursor()
+        cursor.execute(query_string)
+        mysql.connection.commit()
+        return jsonify(data={'userid': cursor.lastrowid})
+    else:
+        return jsonify(data=uuid.uuid4())
 
 @app.route("/fund")
 def fund():
