@@ -43,11 +43,14 @@ def fetchfromdb():
 @app.route("/token", methods=['GET', 'POST'])
 def token():
     if request.method == 'POST' and 'token' in request.json:
-        query_string = "INSERT INTO user (Token, Admin) VALUES ('{0}', 0)".format(request.json['token'])
-        cursor = mysql.connection.cursor()
-        cursor.execute(query_string)
-        mysql.connection.commit()
-        return jsonify(data={'userid': cursor.lastrowid})
+        query_string = "INSERT INTO user (Token, Admin) VALUES ('{0}', 0)"
+        query_string = query_string.format(request.json['token'])
+        try:
+            userId = insertToDbReturnRowId(query_string)
+            return jsonify(userid=userId)
+        except:
+            error = "Error: unable to insert token"
+            return jsonify(userid=None, error=error)
     else:
         return jsonify(data=uuid.uuid4())
 
@@ -64,7 +67,7 @@ def fundRates(fundId):
 @app.route('/wallet', methods=['GET', 'POST'])
 def wallet():
     if request.method == 'POST':
-        query_string = "INSERT INTO wallet (Name) VALUES ({0})".format(request.json.name)
+        query_string = "INSERT INTO wallet (Name) VALUES ('{0}')".format(request.json['name'])
     else:
         query_string = "SELECT Name FROM wallet"
         return fetchFromDbReturnAsJSON(query_string)
@@ -72,26 +75,36 @@ def wallet():
 @app.route('/wallet/<int:walletId>/assets', methods=['GET', 'POST'])
 def walletAssets(walletId):
     if request.method == 'POST':
-        if request.json.operation == 'buy':
-            query_string = 'INSERT INTO asset (Quantity, Bought, WalletId, FundId) VALUES ({0}, {1}, {2}, {3})'.format(request.json.quantity, request.json.bought, request.json.walletid, request.json.fundid)
+        query_string = 'INSERT INTO asset (Quantity, Bought, WalletId, FundId) VALUES ({0}, {1}, {2}, {3})'
+        query_string = query_string.format(request.json['quantity'], request.json['bought'], walletId, request.json['fundid'])
+        assetId = insertToDbReturnRowId(query_string)
+        return
     else:
         query_string = '''SELECT fund.Name AS FundName, Quantity, Bought FROM asset 
         JOIN fund ON fund.Id = asset.FundId
-        WHERE WalletId = ''' + walletId + ''' AND Sold IS NULL
+        WHERE WalletId = {0} AND Sold IS NULL
         ORDER BY Bought DESC'''
+        query_string = query_string.format(walletId)
         return fetchFromDbReturnAsJSON(query_string)
 
 @app.route('/wallet/<int:walletId>/assets/history')
 def walletAssetsHistory(walletId):
     query_string = '''SELECT fund.Name AS FundName, Quantity, Bought, Sold FROM asset 
     JOIN fund ON fund.Id = asset.FundId
-    WHERE WalletId = ''' + walletId + ''' ORDER BY Bought DESC'''
+    WHERE WalletId = {0} ORDER BY Bought DESC'''
+    query_string = query_string.format(walletId)
     return fetchFromDbReturnAsJSON(query_string)
 
 def fetchFromDbReturnAsJSON(query):
     cursor = mysql.connection.cursor()
     cursor.execute(query)
     return jsonify(data=cursor.fetchall())
+
+def insertToDbReturnRowId(query):
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    mysql.connection.commit()
+    return cursor.lastrowid
 
 '''
 @app.route("/dbtest_errorhandling")

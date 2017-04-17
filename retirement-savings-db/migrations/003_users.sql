@@ -6,3 +6,6 @@ CREATE TABLE `thorin87_myretirement`.`user` (
 
 ALTER TABLE `thorin87_myretirement`.`wallet` 
 ADD COLUMN `UserId` INT NOT NULL AFTER `Name`;
+
+ALTER TABLE `thorin87_myretirement`.`user` 
+ADD UNIQUE INDEX `Token_UNIQUE` (`Token` ASC);
