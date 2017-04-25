@@ -43,16 +43,33 @@ def fetchfromdb():
 @app.route("/token", methods=['GET', 'POST'])
 def token():
     if request.method == 'POST' and 'token' in request.json:
-        query_string = "INSERT INTO user (Token, Admin) VALUES ('{0}', 0)"
-        query_string = query_string.format(request.json['token'])
+        query = "INSERT INTO user (Token, Admin) VALUES ('{0}', 0)"
+        query = query.format(request.json['token'])
         try:
-            userId = insertToDbReturnRowId(query_string)
-            return jsonify(userid=userId)
+            insertedId = insertToDb(query)
+            return jsonify(userid=insertedId, error=None)
         except:
             error = "Error: unable to insert token"
             return jsonify(userid=None, error=error)
     else:
-        return jsonify(data=uuid.uuid4())
+        return jsonify(token=uuid.uuid4())
+
+@app.route("/ike")
+def ike():
+    query_string = getAvailableProducts('IKE')
+    return fetchFromDbReturnAsJSON(query_string)
+
+@app.route("/ikze")
+def ikze():
+    query_string = getAvailableProducts('IKE')
+    return fetchFromDbReturnAsJSON(query_string)
+
+def getAvailableProducts(productType):
+    return '''SELECT prod.Id, prod.Name, inst.Name AS Owner, insttype.Name AS OwnerType
+            FROM InvestmentProduct prod
+            JOIN FinancialInstitution inst ON prod.FinancialInstitutionId = inst.Id
+            JOIN FinancialInstitutionType insttype ON inst.TypeId = insttype.Id
+            WHERE prod.Type = '{0}' '''.format(productType)
 
 @app.route("/fund")
 def fund():
@@ -77,8 +94,8 @@ def walletAssets(walletId):
     if request.method == 'POST':
         query_string = 'INSERT INTO asset (Quantity, Bought, WalletId, FundId) VALUES ({0}, {1}, {2}, {3})'
         query_string = query_string.format(request.json['quantity'], request.json['bought'], walletId, request.json['fundid'])
-        assetId = insertToDbReturnRowId(query_string)
-        return
+        #assetId = insertToDb(query_string)
+        #return
     else:
         query_string = '''SELECT fund.Name AS FundName, Quantity, Bought FROM asset 
         JOIN fund ON fund.Id = asset.FundId
@@ -100,7 +117,7 @@ def fetchFromDbReturnAsJSON(query):
     cursor.execute(query)
     return jsonify(data=cursor.fetchall())
 
-def insertToDbReturnRowId(query):
+def insertToDb(query):
     cursor = mysql.connection.cursor()
     cursor.execute(query)
     mysql.connection.commit()
