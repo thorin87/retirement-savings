@@ -3,17 +3,15 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
+import {environment} from "../environments/environment";
 
 @Injectable()
 export class ApiService {
 
-  //TODO: do wydzielenia do zewnętrznego configa
-  private baseUrl: string = 'http://localhost:5000';
+  constructor(private http: Http) { }
 
-  constructor(private http : Http) { }
-
-  getTestData() : Observable<any> {
-    return this.http.get(`${this.baseUrl}/dbtest`)
+  getTestData(): Observable<any> {
+    return this.http.get(`${environment.apiPath}/dbtest`)
     .map(this.extractData)
     .catch(this.handleError);
   }

@@ -35,7 +35,7 @@ def main():
 
 @app.route("/dbtest")
 def fetchfromdb():
-    query_string = "SELECT Date, Value FROM rate WHERE Date > '2015-01-01' AND FundId = 1"
+    query_string = "SELECT Date, Value FROM Rate WHERE Date > '2015-01-01' AND FundId = 5"
     cursor = mysql.connection.cursor()
     cursor.execute(query_string)
     return jsonify(data=cursor.fetchall())

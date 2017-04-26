@@ -30,8 +30,7 @@ import { ChartModule } from 'angular2-highcharts';
     FooterModule,
     RouterModule.forRoot([]),
     FormsModule,
-    HttpModule,
-    ChartModule.forRoot(require('highcharts/highstock'))
+    HttpModule
   ],
   providers: [
     ApiService
