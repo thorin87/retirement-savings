@@ -10,8 +10,8 @@ export class ApiService {
 
   constructor(private http: Http) { }
 
-  getTestData(): Observable<any> {
-    return this.http.get(`${environment.apiPath}/dbtest`)
+  getAllAssets(): Observable<any> {
+    return this.http.get(`${environment.apiPath}/allAssets`)
     .map(this.extractData)
     .catch(this.handleError);
   }

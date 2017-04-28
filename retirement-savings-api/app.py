@@ -33,13 +33,6 @@ CORS(app)
 def main():
     return "Hello World!"
 
-@app.route("/dbtest")
-def fetchfromdb():
-    query_string = "SELECT Date, Value FROM Rate WHERE Date > '2015-01-01' AND FundId = 5"
-    cursor = mysql.connection.cursor()
-    cursor.execute(query_string)
-    return jsonify(data=cursor.fetchall())
-
 @app.route("/token", methods=['GET', 'POST'])
 def token():
     if request.method == 'POST' and 'token' in request.json:
@@ -112,10 +105,55 @@ def walletAssetsHistory(walletId):
     query_string = query_string.format(walletId)
     return fetchFromDbReturnAsJSON(query_string)
 
-def fetchFromDbReturnAsJSON(query):
+@app.route('/allAssets')
+def allAssets():
+    query = '''SELECT Rate.Date, ROUND(SUM(Asset.Quantity * Rate.Value), 2) AS Value
+    FROM Asset
+    JOIN Wallet ON Asset.WalletId = Wallet.Id
+    JOIN Rate 
+    ON Asset.FundId = Rate.FundId
+    AND Rate.Date >= Asset.Bought
+    AND Rate.Date < COALESCE(Asset.Sold, NOW())
+    WHERE UserId = 1
+    GROUP BY Rate.Date
+    ORDER BY Rate.Date ASC'''
+    return fetchFromDbReturnAsJSON(query)
+
+@app.route('/summary')
+def summary():
+    money_spent_query = '''SELECT ROUND(SUM(Quantity * Value), 2) as Value
+    FROM Asset 
+    JOIN Rate ON Rate.Date = Asset.Bought AND Rate.FundId = Asset.FundId
+    WHERE Sold IS NULL'''
+    money_spent = fetchSingle(money_spent_query)
+
+    current_value_query = '''SELECT ROUND(SUM(Quantity * Value), 2) as Value
+    FROM Asset 
+    JOIN Rate ON Rate.FundId = Asset.FundId
+    JOIN (SELECT FundId, MAX(Date) as MaxDate FROM Rate GROUP BY FundId) AS RateMax
+    ON RateMax.MaxDate = Rate.Date AND RateMax.FundId = Rate.FundId
+    WHERE Sold IS NULL'''
+    current_value = fetchSingle(current_value_query)
+
+    difference = current_value[0] - money_spent[0]
+
+    return jsonify(saved = money_spent[0], 
+    have = current_value[0], 
+    diff = difference,
+    percetage = difference * 100/current_value[0])
+
+def fetchSingle(query):
     cursor = mysql.connection.cursor()
     cursor.execute(query)
-    return jsonify(data=cursor.fetchall())
+    return cursor.fetchone()
+
+def fetchFromDb(query):
+    cursor = mysql.connection.cursor()
+    cursor.execute(query)
+    return cursor.fetchall()
+
+def fetchFromDbReturnAsJSON(query):
+    return jsonify(data=fetchFromDb(query))
 
 def insertToDb(query):
     cursor = mysql.connection.cursor()

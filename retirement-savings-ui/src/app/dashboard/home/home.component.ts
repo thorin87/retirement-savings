@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit{
     constructor(private apiService: ApiService) { }
 
     ngOnInit(): void {
-      this.apiService.getTestData().first().subscribe(response => this.dataFromApi = response);
+      this.apiService.getAllAssets().first().subscribe(response => this.dataFromApi = response);
 
       let labels = ["Nazwa"];
 
