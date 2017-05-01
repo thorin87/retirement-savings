@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ROUTES } from '../.././sidebar/sidebar-routes.config';
 import { MenuType } from '../.././sidebar/sidebar.metadata';
-import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
 @Component({
     moduleId: module.id,
@@ -11,15 +10,15 @@ import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common'
 
 export class NavbarComponent implements OnInit{
     private listTitles: any[];
-    location: Location;
-    constructor(location:Location) {
-        this.location = location;
+
+    constructor() {
     }
     ngOnInit(){
         this.listTitles = ROUTES.filter(listTitle => listTitle.menuType !== MenuType.BRAND);
     }
     getTitle(){
-        var titlee = this.location.prepareExternalUrl(this.location.path());
+        /*
+      var titlee = this.location.prepareExternalUrl(this.location.path());
         if(titlee.charAt(0) === '#'){
             titlee = titlee.slice( 2 );
         }
@@ -28,6 +27,7 @@ export class NavbarComponent implements OnInit{
                 return this.listTitles[item].title;
             }
         }
+        */
         return 'Dashboard';
     }
 }

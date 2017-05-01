@@ -3,7 +3,8 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import {environment} from "../environments/environment";
+import {environment} from "../../environments/environment";
+import {Summary} from "./model/summary-model";
 
 @Injectable()
 export class ApiService {
@@ -17,7 +18,6 @@ export class ApiService {
   }
 
   private extractData(res: Response) {
-    //debugger;
     let body = res.json();
     return body.data || { };
   }
@@ -34,5 +34,33 @@ export class ApiService {
     }
     console.error(errMsg);
     return Observable.throw(errMsg);
+  }
+
+  getSummary(): Observable<Summary> {
+    return this.http.get(`${environment.apiPath}/summary`)
+      .map((res: Response) => {
+        let body = res.json();
+        return <Summary>{
+          saved: +body.saved,
+          have: +body.have,
+          diff: +body.diff,
+          percentage: +body.percentage,
+          meanPercentage: +body.meanPercentage,
+          period: +body.period
+        };
+      })
+      .catch(this.handleError);
+  }
+
+  getWallets(): Observable<any> {
+    return this.http.get(`${environment.apiPath}/wallet`)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
+
+  getAssetsInWallet(walletId: number): Observable<any> {
+    return this.http.get(`${environment.apiPath}/wallet/${walletId}/assets`)
+      .map(this.extractData)
+      .catch(this.handleError);
   }
 }

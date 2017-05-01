@@ -4,7 +4,7 @@ export class Chart {
     public type: string = 'line';
 }
 
-export class ChartSeries{
+export class ChartSeries {
      public data: Array<any>;
      public name: string;
 }

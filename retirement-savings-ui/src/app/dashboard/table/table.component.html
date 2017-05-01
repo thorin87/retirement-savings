@@ -8,11 +8,11 @@
             <table class="table table-hover">
                 <thead class="text-warning">
                     <tr>
-                        <th *ngFor="let label of data.labels">{{label}}</th>
+                        <th *ngFor="let label of data?.labels">{{label}}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of data.data">
+                    <tr *ngFor="let row of data?.data">
                         <td>{{row.name}}</td>
                     </tr>
                 </tbody>

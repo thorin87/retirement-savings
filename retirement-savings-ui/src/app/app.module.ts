@@ -6,16 +6,13 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ChartComponent } from './chart/chart.component';
 
-import { ApiService } from './api.service';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { ApiService } from './api/api.service';
 
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SidebarModule } from './sidebar/sidebar.module';
 import { FooterModule } from './shared/footer/footer.module';
 import { NavbarModule} from './shared/navbar/navbar.module';
-import { ChartModule } from 'angular2-highcharts';
 
 @NgModule({
   declarations: [
@@ -28,7 +25,7 @@ import { ChartModule } from 'angular2-highcharts';
     SidebarModule,
     NavbarModule,
     FooterModule,
-    RouterModule.forRoot([]),
+    // RouterModule.forRoot([]),
     FormsModule,
     HttpModule
   ],

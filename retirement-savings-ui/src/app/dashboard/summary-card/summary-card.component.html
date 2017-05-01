@@ -1,0 +1,17 @@
+<div class="card card-stats" >
+  <div class="card-header card-header-svg card-color-{{color}}">
+    <i class="material-icons" *ngIf="!(icon == 'percent')">{{icon}}</i>
+    <svg style="margin: 10px" viewBox="0 0 24 24" *ngIf="icon=='percent'">
+      <path fill="#ffffff" d="M7,4A3,3 0 0,1 10,7A3,3 0 0,1 7,10A3,3 0 0,1 4,7A3,3 0 0,1 7,4M17,14A3,3 0 0,1 20,17A3,3 0 0,1 17,20A3,3 0 0,1 14,17A3,3 0 0,1 17,14M20,5.41L5.41,20L4,18.59L18.59,4L20,5.41Z" />
+    </svg>
+  </div>
+  <div class="card-content">
+    <p class="category">{{title}}</p>
+    <h3 class="title"><ng-content></ng-content></h3>
+  </div>
+  <div class="card-footer">
+    <div class="stats">
+      <i class="material-icons">{{statIcon}}</i> {{statText}}
+    </div>
+  </div>
+</div>

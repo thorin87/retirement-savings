@@ -5,6 +5,8 @@ import { ChartModule } from 'angular2-highcharts';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { ChartComponent } from '../chart/chart.component';
 import { CommonModule } from "@angular/common";
+import { SummaryCardComponent } from './summary-card/summary-card.component';
+import {HomeComponent} from "./home/home.component";
 
 export function highchartsFactory() {
   const hc = require('highcharts/highstock');
@@ -16,17 +18,21 @@ export function highchartsFactory() {
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule.forChild(MODULE_ROUTES),
+        // RouterModule.forChild(MODULE_ROUTES),
         ChartModule
     ],
     declarations: [
         ChartComponent,
-        MODULE_COMPONENTS ],
-    providers:[
+        MODULE_COMPONENTS,
+        SummaryCardComponent ],
+    providers: [
       {
         provide: HighchartsStatic,
         useFactory: highchartsFactory
       }
+    ],
+    exports: [
+      HomeComponent
     ]
 })
 

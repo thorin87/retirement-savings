@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { TableData } from "./table.model";
 
 @Component({
-    selector: 'table-cmp',
+    selector: 'app-table',
     moduleId: module.id,
     templateUrl: 'table.component.html'
 })
