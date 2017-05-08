@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { TableData } from '../table/table.model';
-import {Summary} from '../../api/model/summary-model';
+import {Summary} from '../../api/model/summary.model';
+import {Wallet} from "../../api/model/wallet.model";
 
 declare var $: any;
 
@@ -14,7 +15,7 @@ declare var $: any;
 
 export class HomeComponent implements OnInit{
     public chartData: any;
-    public wallets: any;
+    public wallets: Wallet[];
     public summary: Summary;
 
     constructor(private apiService: ApiService) { }
@@ -23,11 +24,11 @@ export class HomeComponent implements OnInit{
       this.apiService.getSummary().first().subscribe(response => this.summary = response);
       this.apiService.getWallets().first().subscribe(response => {
         response.forEach(wallet =>
-          this.apiService.getAssetsInWallet(wallet[0]).first().subscribe(
+          this.apiService.getAssetsInWallet(wallet.Id).first().subscribe(
             assetResp => {
-              wallet[5] = new TableData();
-              wallet[5].labels = ['Nazwa'];
-              wallet[5].data = assetResp.map(x => ({name: x[0]}));
+              wallet.Assets = new TableData();
+              wallet.Assets.labels = ['Nazwa'];
+              wallet.Assets.data = assetResp.map(x => ({name: x.FundName}));
             }
           )
         );

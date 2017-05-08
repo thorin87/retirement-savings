@@ -60,7 +60,7 @@
             </div>
 
             <div class="row">
-                <app-table *ngFor="let wallet of wallets" [title]="'Twój portfel ' + wallet[1] " [subtitle]="wallet[2] + ' w ' + wallet[3]" [data]="wallet[5]"></app-table>
+                <app-table *ngFor="let wallet of wallets" [title]="'Twój portfel ' + wallet.Name" [subtitle]="wallet.ProductName + ' w ' + wallet.Owner" [data]="wallet.Assets"></app-table>
             </div>
         </div>
 </div>

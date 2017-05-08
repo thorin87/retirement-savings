@@ -45,8 +45,8 @@ export class ChartComponent {
     const chartSeries = new ChartSeries();
     chartSeries.name = 'Wszystkie portfele';
     chartSeries.data = apiResult.map(element => {
-      const date = Date.parse(element[0]);
-      const value = +element[1];
+      const date = Date.parse(element.Date);
+      const value = +element.Value;
       return [date, value];
     });
     return chartSeries;

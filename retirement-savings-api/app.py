@@ -7,6 +7,9 @@ from flask import jsonify
 from flask_cors import CORS, cross_origin
 from flask_mysqldb import MySQL
 import uuid
+import json
+import datetime
+from datetime import date
 
 app = Flask(__name__)
 
@@ -116,6 +119,28 @@ def walletAssetsHistory(walletId):
 
 @app.route('/allAssets')
 def allAssets():
+    # assets_query = '''SELECT FundId, OperationDate FROM Asset 
+    # JOIN Wallet ON Wallet.Id = Asset.WalletId
+    # WHERE Wallet.UserId = 1
+    # GROUP BY Asset.FundId'''
+    # asset_ids = query_db(assets_query)
+    
+    # min_date = date.today()
+    # fund_ids = []
+    # for row in asset_ids:
+    #     if row['OperationDate'].date() < min_date:
+    #         min_date = row['OperationDate'].date()
+    #     if row['FundId'] not in fund_ids:
+    #         fund_ids.append(row['FundId'])
+    
+    
+    # values_at_date_query = '''SELECT FundId, Date, Value FROM Rate WHERE Date >= '%s' AND FundId IN (%s) ORDER BY Date ASC'''
+    # values_at_date_query = values_at_date_query % (min_date, ",".join(map(str, fund_ids)))
+    # values_at_date = query_db(values_at_date_query)
+    #values_at_date = query_db(values_at_date_query, (min_date, ",".join(map(str, fund_ids))))
+
+    #return jsonify(values_at_date_query2, values_at_date, (min_date, ",".join(map(str, fund_ids)) ))
+
     query = '''SELECT DatesToCalculateValue.Date, 
 	ROUND(SUM(Asset.Quantity * (SELECT Value FROM Rate WHERE Date <= DatesToCalculateValue.Date AND FundId = Asset.FundId ORDER BY Date DESC LIMIT 1)), 2) AS Value
     FROM Wallet
@@ -163,13 +188,20 @@ def fetchSingle(query):
     cursor.execute(query)
     return cursor.fetchone()
 
-def fetchFromDb(query):
-    cursor = mysql.connection.cursor()
-    cursor.execute(query)
-    return cursor.fetchall()
+def query_db(query, args=(), one=False):
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute(query, args)
+        #poniżej magia, nie ruszać
+        r = [dict((cur.description[i][0], value) \
+                for i, value in enumerate(row)) for row in cur.fetchall()]
+        data = (r[0] if r else None) if one else r
+    except:
+        data = "Error: unable to fetch items"
+    return data
 
 def fetchFromDbReturnAsJSON(query):
-    return jsonify(data=fetchFromDb(query))
+    return jsonify(data=query_db(query))
 
 def insertToDb(query):
     cursor = mysql.connection.cursor()
@@ -182,16 +214,5 @@ def insertToDb(query):
 def getUserId():
     return 1
 
-'''
-@app.route("/dbtest_errorhandling")
-def fetchfromdberrorhandling():
-    query_string = "SELECT Date, Value FROM rate WHERE Date > '2015-01-01' AND FundId = 1" 
-    try:
-        cursor.execute(query_string)
-        data = cursor.fetchall()
-    except:
-        data = "Error: unable to fetch items"
-    return jsonify(data)
-'''
 if __name__ == '__main__':
     app.run(debug=True)

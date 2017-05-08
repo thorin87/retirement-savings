@@ -3,8 +3,9 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import {environment} from "../../environments/environment";
-import {Summary} from "./model/summary-model";
+import {environment} from '../../environments/environment';
+import {Summary} from './model/summary.model';
+import {Wallet} from './model/wallet.model';
 
 @Injectable()
 export class ApiService {
@@ -18,7 +19,7 @@ export class ApiService {
   }
 
   private extractData(res: Response) {
-    let body = res.json();
+    const body = res.json();
     return body.data || { };
   }
 
@@ -39,7 +40,7 @@ export class ApiService {
   getSummary(): Observable<Summary> {
     return this.http.get(`${environment.apiPath}/summary`)
       .map((res: Response) => {
-        let body = res.json();
+        const body = res.json();
         return <Summary>{
           saved: +body.saved,
           have: +body.have,
@@ -52,7 +53,7 @@ export class ApiService {
       .catch(this.handleError);
   }
 
-  getWallets(): Observable<any> {
+  getWallets(): Observable<Wallet[]> {
     return this.http.get(`${environment.apiPath}/wallet`)
       .map(this.extractData)
       .catch(this.handleError);
