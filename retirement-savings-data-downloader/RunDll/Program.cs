@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-            DataDownloader.DataDownloader.DownloadFunds();
+            DataDownloader.DataDownloader.DownloadFundRatesAndSaveToApi();
         }
     }
 }

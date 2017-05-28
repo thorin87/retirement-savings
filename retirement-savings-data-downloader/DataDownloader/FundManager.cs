@@ -10,37 +10,38 @@ namespace DataDownloader
     {
         public struct Fund
         {
-            public string Name;
-            public string Filename;
-            public string Url;
-            public string WebPage { get; internal set; }
+            public int Id { get; private set; }
+            public string Name { get; private set; }
+            public int ExternalId { get; private set; }
+
+            public string Filename
+            {
+                get { return Name.Replace(' ', '_') + ".json"; }
+            }
+
+            public string Url
+            {
+                get { return $"https://www.nntfi.pl/?action=quotes.getQuotesValuesAsJSON&unitCategoryId=5&fundId={ExternalId}"; } //&startDate={0}&endDate={1}",
+            }
+
+            public Fund(int id, string name, int externalId)
+            {
+                Id = id;
+                Name = name;
+                ExternalId = externalId;
+            }
         }
 
         public static List<Fund> GetFunds()
         {
-            var result = new List<Fund>();
-            result.Add(new Fund()
+            return new List<Fund>()
             {
-                Name = "ING Obligacji",
-                Filename = "ING_Obligacji_(K).txt",
-                Url = "https://www.nntfi.pl/?action=quotes.getQuotesValuesAsJSON&unitCategoryId=5&fundId=3", //&startDate={0}&endDate={1}",
-                WebPage = "https://www.nntfi.pl/fundusze-inwestycyjne/fundusze-obligacji/nn-obligacji?unitsCategoryId=K"
-            });
-            result.Add(new Fund()
-            {
-                Name = "ING Perspektywa 2045",
-                Filename = "ING_Perspektywa_2045_(K).txt",
-                Url = "https://www.nntfi.pl/?action=quotes.getQuotesValuesAsJSON&unitCategoryId=5&fundId=26", //&startDate={0}&endDate={1}",
-                WebPage = "https://www.nntfi.pl/fundusze-inwestycyjne/fundusze-cyklu-zycia/nn-perspektywa-2045?unitsCategoryId=K"
-            });
-            result.Add(new Fund()
-            {
-                Name = "ING Stabilny Globalnej Alokacji (L)",
-                Filename = "ING_(L)_Stabilny_Globalnej_Alokacji_(K).txt",
-                Url = "https://www.nntfi.pl/?action=quotes.getQuotesValuesAsJSON&fundId=1500037&unitCategoryId=5",
-                WebPage = "https://www.nntfi.pl/fundusze-inwestycyjne/fundusze-mieszane/nn-stabilny-globalnej-alokacji?unitsCategoryId=K"
-            });
-            return result;
+                new Fund(3, "NN Gotówkowy (K)", 8),
+                new Fund(5, "NN Obligacji (K)", 3),
+                new Fund(11, "NN (L) Globalny Spółek Dywidendowych (K)", 18),
+                new Fund(15, "NN (L) Stabilny Globalnej Alokacji (K)", 1500037),
+                new Fund(23, "NN Perspektywa 2045 (K)", 26)
+            };
         }
     }
 }

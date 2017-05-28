@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDownloader", "DataDownl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunDll", "RunDll\RunDll.csproj", "{240835EC-D418-4CF9-9336-4515095846C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiConnector", "ApiConnector\ApiConnector.csproj", "{941398D1-5266-4576-9899-A3FC9786C0BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{240835EC-D418-4CF9-9336-4515095846C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{240835EC-D418-4CF9-9336-4515095846C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{240835EC-D418-4CF9-9336-4515095846C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{941398D1-5266-4576-9899-A3FC9786C0BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{941398D1-5266-4576-9899-A3FC9786C0BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{941398D1-5266-4576-9899-A3FC9786C0BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{941398D1-5266-4576-9899-A3FC9786C0BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

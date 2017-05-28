@@ -74,10 +74,19 @@ def fund():
     query_string = "SELECT Id, Name FROM Fund"
     return fetchFromDbReturnAsJSON(query_string)
 
-@app.route('/fund/<int:fundId>/rates')
+@app.route('/fund/<int:fundId>/rates', methods=['GET', 'POST'])
 def fundRates(fundId):
-    query_string = "SELECT Date, Value FROM Rate WHERE FundId = " + fundId
-    return fetchFromDbReturnAsJSON(query_string)
+    if request.method == 'POST':
+        if 'token' in request.json and check_if_admin(request.json['token']):
+            values = []
+            for row in request.json['data']:
+                values.append("('{0}', {1}, {2})".format(row['Date'], row['Value'], fundId))
+            insert_query = '''INSERT IGNORE INTO Rate (`Date`,`Value`,`FundId`) VALUES ''' + ', '.join(values)
+            insertToDb(insert_query)
+            return jsonify(), 201, {'location': '/fund/{0}/rates'.format(fundId)}
+    else:
+        query_string = "SELECT Date, Value FROM Rate WHERE FundId = " + fundId
+        return fetchFromDbReturnAsJSON(query_string)
 
 @app.route('/wallet', methods=['GET', 'POST'])
 def wallet():
@@ -213,6 +222,12 @@ def insertToDb(query):
 #TODO dodać pobieranie tokena z settings a potem z url/cookie
 def getUserId():
     return 1
+
+def check_if_admin(token):
+    query = "SELECT Admin FROM User WHERE Token = '{0}'"
+    query = query.format(token)
+    isAdmin = fetchSingle(query)
+    return isAdmin[0] == 1
 
 if __name__ == '__main__':
     app.run(debug=True)

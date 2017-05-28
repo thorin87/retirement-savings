@@ -1,0 +1,11 @@
+ALTER TABLE `Fund` 
+ADD COLUMN `ExternalId` INT NULL
+
+ALTER TABLE `Rate` 
+DROP INDEX `DateAndFundId` ,
+ADD UNIQUE INDEX `DateAndFundId` (`Date` ASC, `FundId` ASC),
+
+ALTER TABLE `Rate` 
+DROP COLUMN `LastUpdate`;
+
+

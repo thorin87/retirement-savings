@@ -2,21 +2,25 @@
 using DataDownloader.Properties;
 using System.IO;
 using System.Net;
+using ApiConnector.Model;
 
 namespace DataDownloader
 {
     public class DataDownloader
     {
-        public static void DownloadFunds()
+        public static void DownloadFundRatesAndSaveToApi()
         {
             List<FundManager.Fund> funds = FundManager.GetFunds();
-            foreach (FundManager.Fund f in funds)
+            var repository = new ApiConnector.RateRepository();
+            foreach (FundManager.Fund fund in funds)
             {
-                DownloadFile(f);
+                DownloadResult result = DownloadFile(fund);
+                IReadOnlyCollection<Rate> rates = FundParser.ParseNN(result.Contents);
+                repository.AddRange(fund.Id, rates);
             }
         }
 
-        private static bool DownloadFile(FundManager.Fund f)
+        private static DownloadResult DownloadFile(FundManager.Fund f)
         {
             string localFilepath = Settings.Default.FilePath;
             if (!Directory.Exists(localFilepath))
@@ -24,13 +28,13 @@ namespace DataDownloader
                 Directory.CreateDirectory(localFilepath);
             }
             string path = Path.Combine(new string[] { localFilepath, f.Filename });
-            //string url = string.Format(f.Url, new DateTime(2014, 1, 1).ToShortDateString(), DateTime.Today.ToShortDateString());
+            //string url = string.Format(f.Url, new DateTime(2017, 1, 1).ToShortDateString());
 
             string fileContent = ReadStreamFromUrl(f.Url);
 
             try { File.WriteAllText(path, fileContent); }
-            catch { return false; }
-            return true;
+            catch { return new DownloadResult { IsSuccess = false }; }
+            return new DownloadResult { IsSuccess = true, FilePath = path, Contents = fileContent };
         }
 
         private static string ReadStreamFromUrl(string url)
