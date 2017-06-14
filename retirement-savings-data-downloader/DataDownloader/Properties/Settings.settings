@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="FilePath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">../../../datafiles</Value>
+      <Value Profile="(Default)">..\..\..\datafiles</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -13,22 +13,38 @@ namespace DataDownloader
             public int Id { get; private set; }
             public string Name { get; private set; }
             public int ExternalId { get; private set; }
+            public FundType Type { get; private set; }
 
             public string Filename
             {
-                get { return Name.Replace(' ', '_') + ".json"; }
+                get
+                {
+                    if (Type == FundType.NationaleNederlanden)
+                        return Name.Replace(' ', '_') + ".json";
+                    if (Type == FundType.PZU)
+                        return Name.Replace(' ', '_') + ".xls";
+                    return Name.Replace(' ', '_') + ".dat";
+                }
             }
 
             public string Url
             {
-                get { return $"https://www.nntfi.pl/?action=quotes.getQuotesValuesAsJSON&unitCategoryId=5&fundId={ExternalId}"; } //&startDate={0}&endDate={1}",
+                get
+                {
+                    if (Type == FundType.NationaleNederlanden)
+                        return $"https://www.nntfi.pl/?action=quotes.getQuotesValuesAsJSON&unitCategoryId=5&fundId={ExternalId}"; //&startDate={0}&endDate={1}",
+                    if (Type == FundType.PZU)
+                        return "https://www.pzu.pl/portal-portlet-funds/fundRatingsExcelFile?from=2017-01-01&to=2017-06-13&fids=1330";
+                    throw new InvalidOperationException("Brak url");
+                }
             }
 
-            public Fund(int id, string name, int externalId)
+            public Fund(int id, string name, int externalId, FundType type)
             {
                 Id = id;
                 Name = name;
                 ExternalId = externalId;
+                Type = type;
             }
         }
 
@@ -36,11 +52,12 @@ namespace DataDownloader
         {
             return new List<Fund>()
             {
-                new Fund(3, "NN Gotówkowy (K)", 8),
-                new Fund(5, "NN Obligacji (K)", 3),
-                new Fund(11, "NN (L) Globalny Spółek Dywidendowych (K)", 18),
-                new Fund(15, "NN (L) Stabilny Globalnej Alokacji (K)", 1500037),
-                new Fund(23, "NN Perspektywa 2045 (K)", 26)
+                new Fund(3, "NN Gotówkowy (K)", 8, FundType.NationaleNederlanden),
+                new Fund(5, "NN Obligacji (K)", 3, FundType.NationaleNederlanden),
+                new Fund(11, "NN (L) Globalny Spółek Dywidendowych (K)", 18, FundType.NationaleNederlanden),
+                new Fund(15, "NN (L) Stabilny Globalnej Alokacji (K)", 1500037, FundType.NationaleNederlanden),
+                new Fund(23, "NN Perspektywa 2045 (K)", 26, FundType.NationaleNederlanden),
+                new Fund(24, "DFE PZU", 0, FundType.PZU)
             };
         }
     }

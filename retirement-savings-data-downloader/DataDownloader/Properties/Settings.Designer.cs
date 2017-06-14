@@ -25,7 +25,7 @@ namespace DataDownloader.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("../../../datafiles")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\..\\..\\datafiles")]
         public string FilePath {
             get {
                 return ((string)(this["FilePath"]));
