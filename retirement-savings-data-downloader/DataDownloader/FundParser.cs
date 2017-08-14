@@ -18,7 +18,10 @@ namespace DataDownloader
             var result = new HashSet<Rate>();
             object deserializedJson = JsonConvert.DeserializeObject(contents);//,  new JsonConverter[] { new JavaScriptDateTimeConverter() });
             //TODO: sprawdzić RestRequest.DateFormat Unix Timestamps
-
+            if(deserializedJson == null)
+            {
+                return result;
+            }
             JArray deserializedJsonJArray = deserializedJson as JArray;
            
             foreach (JToken course in deserializedJsonJArray[1])

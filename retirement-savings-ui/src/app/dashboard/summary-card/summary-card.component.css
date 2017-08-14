@@ -29,3 +29,7 @@
 .card a {
   color: #FFFFFF;
 }
+
+.card-stats {
+  height: 127px;
+}

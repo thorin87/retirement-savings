@@ -7,6 +7,7 @@ import { ChartComponent } from '../chart/chart.component';
 import { CommonModule } from "@angular/common";
 import { SummaryCardComponent } from './summary-card/summary-card.component';
 import {HomeComponent} from "./home/home.component";
+import {MaterialModule} from "@angular/material";
 
 export function highchartsFactory() {
   const hc = require('highcharts/highstock');
@@ -19,7 +20,8 @@ export function highchartsFactory() {
     imports: [
         CommonModule,
         // RouterModule.forChild(MODULE_ROUTES),
-        ChartModule
+        ChartModule,
+      MaterialModule
     ],
     declarations: [
         ChartComponent,

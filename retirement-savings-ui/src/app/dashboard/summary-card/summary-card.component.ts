@@ -12,10 +12,15 @@ export class SummaryCardComponent implements OnInit {
   @Input() title: string;
   @Input() statIcon: string;
   @Input() statText: string;
+  @Input() isLoading: boolean;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  isFooterVisible(): boolean {
+    return this.statIcon != null && this.statText != null;
   }
 
 }
