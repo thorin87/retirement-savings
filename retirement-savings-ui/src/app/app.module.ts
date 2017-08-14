@@ -13,9 +13,6 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { SidebarModule } from './sidebar/sidebar.module';
 import { FooterModule } from './shared/footer/footer.module';
 import { NavbarModule} from './shared/navbar/navbar.module';
-import {MaterialModule} from "@angular/material";
-import {MyMaterialModule} from "./shared/my-material.module";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -24,15 +21,13 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     DashboardModule,
     SidebarModule,
     NavbarModule,
     FooterModule,
     // RouterModule.forRoot([]),
     FormsModule,
-    HttpModule,
-    MaterialModule
+    HttpModule
   ],
   providers: [
     ApiService

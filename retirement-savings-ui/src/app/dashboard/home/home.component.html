@@ -14,7 +14,7 @@
                   <app-summary-card [color]="'purple'"
                                     [icon]="'input'"
                                     [title]="'Wpłacona kwota'"
-                                    [isLoading]="true">
+                                    [isLoading]="summary.isFetching">
                     {{summary.result?.saved}}<small>zł</small>
                   </app-summary-card>
                 </div>
@@ -23,7 +23,8 @@
                                     [icon]="'trending_up'"
                                     [title]="'Zysk'"
                                     [statIcon]="'date_range'"
-                                    [statText]="'od ' + summary.result?.period + ' dni'">
+                                    [statText]="'od ' + summary.result?.period + ' dni'"
+                                    [isLoading]="summary.isFetching">
                     {{summary.result?.diff}}<small>zł</small>
                   </app-summary-card>
                 </div>
@@ -32,7 +33,8 @@
                                     [icon]="'percent'"
                                     [title]="'Stopa zwrotu'"
                                     [statIcon]="'timeline'"
-                                    [statText]="'średnia roczna zmiana'">
+                                    [statText]="'średnia roczna zmiana'"
+                                    [isLoading]="summary.isFetching">
                     +{{summary.result?.meanPercentage | number:'1.2-2'}}<small>%</small>
                   </app-summary-card>
                 </div>

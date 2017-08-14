@@ -33,3 +33,8 @@
 .card-stats {
   height: 127px;
 }
+
+.card-preloader {
+  padding-top: 48px;
+  padding-left: 148px;
+}
