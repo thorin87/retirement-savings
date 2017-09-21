@@ -34,7 +34,7 @@ namespace DataDownloader
                     if (Type == FundType.NationaleNederlanden)
                         return $"https://www.nntfi.pl/?action=quotes.getQuotesValuesAsJSON&unitCategoryId=5&fundId={ExternalId}"; //&startDate={0}&endDate={1}",
                     if (Type == FundType.PZU)
-                        return "https://www.pzu.pl/portal-portlet-funds/fundRatingsExcelFile?from=2017-01-01&to=2017-06-13&fids=1330";
+                        return String.Format("https://www.pzu.pl/portal-portlet-funds/fundRatingsExcelFile?from=2017-01-01&to={0}&fids=1330", DateTime.Now.ToString("yyyy-MM-dd"));
                     throw new InvalidOperationException("Brak url");
                 }
             }
