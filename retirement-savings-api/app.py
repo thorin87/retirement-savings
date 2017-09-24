@@ -181,6 +181,9 @@ def summary():
     invest_days_query = '''SELECT DATEDIFF(NOW(), MIN(OperationDate)) FROM Asset JOIN Wallet ON Asset.WalletId = Wallet.Id WHERE Wallet.UserId = 1'''
     invest_days = fetchSingle(invest_days_query)
 
+    lastUpdateInDaysQuery = '''SELECT DATEDIFF(NOW(), MAX(Date)) FROM Rate'''
+    lastUpdateInDays = fetchSingle(lastUpdateInDaysQuery)
+
     difference = current_value[0] - money_spent[0]
     earn_per_year = difference * 356 / invest_days[0]
 
@@ -189,7 +192,9 @@ def summary():
     diff = difference,
     percentage = difference * 100/current_value[0],
     meanPercentage = earn_per_year * 100/current_value[0],
-    period = invest_days[0])
+    period = invest_days[0],
+    lastUpdateInDays = lastUpdateInDays[0],
+    lastDepositDate = '09-11-2016')
 
 ########## datebase helper method
 def fetchSingle(query):

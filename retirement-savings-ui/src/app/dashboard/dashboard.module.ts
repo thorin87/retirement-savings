@@ -8,6 +8,8 @@ import { CommonModule } from "@angular/common";
 import { SummaryCardComponent } from './summary-card/summary-card.component';
 import {HomeComponent} from "./home/home.component";
 import {SpinnerComponent} from "../shared/spinner/spinner.component";
+import { CardComponent } from './card/card.component';
+import { WelcomeMessageComponent } from './welcome-message/welcome-message.component';
 
 export function highchartsFactory() {
   const hc = require('highcharts/highstock');

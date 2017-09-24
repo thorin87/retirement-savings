@@ -13,11 +13,15 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { SidebarModule } from './sidebar/sidebar.module';
 import { FooterModule } from './shared/footer/footer.module';
 import { NavbarModule} from './shared/navbar/navbar.module';
+import {WelcomeMessageComponent} from "./dashboard/welcome-message/welcome-message.component";
+import {CardComponent} from "./dashboard/card/card.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    WelcomeMessageComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

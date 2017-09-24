@@ -4,5 +4,7 @@ export interface Summary {
   percentage: number;
   meanPercentage: number;
   period: number;
-  saved: number;
+  saved: number; //deposit
+  lastUpdateInDays: number;
+  lastDepositDate: string;
 }

@@ -47,7 +47,9 @@ export class ApiService {
           diff: +body.diff,
           percentage: +body.percentage,
           meanPercentage: +body.meanPercentage,
-          period: +body.period
+          period: +body.period,
+          lastUpdateInDays: +body.lastUpdateInDays,
+          lastDepositDate: body.lastDepositDate
         };
       })
       .catch(this.handleError);

@@ -200,32 +200,32 @@
         }
     }
 
-    [data-background-color="purple"]{
+    [predefined-background-color="purple"]{
         background: linear-gradient(60deg, $purple-400, $purple-600);
         @include shadow-big-color($brand-primary);
     }
 
-    [data-background-color="blue"]{
+    [predefined-background-color="blue"]{
         background: linear-gradient(60deg, $cyan-400, $cyan-600);
         @include shadow-big-color($brand-info);
     }
 
-    [data-background-color="green"]{
+    [predefined-background-color="green"]{
         background: linear-gradient(60deg, $green-400, $green-600);
         @include shadow-big-color($brand-success);
     }
 
-    [data-background-color="orange"]{
+    [predefined-background-color="orange"]{
         background: linear-gradient(60deg, $orange-400, $orange-600);
         @include shadow-big-color($brand-warning);
     }
 
-    [data-background-color="red"]{
+    [predefined-background-color="red"]{
         background: linear-gradient(60deg, $red-400, $red-600);
         @include shadow-big-color($brand-danger);
     }
 
-    [data-background-color]{
+    [predefined-background-color]{
         color: $white-color;
 
         a{
