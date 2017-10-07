@@ -15,7 +15,7 @@
                             [icon]="'input'"
                             [title]="'Wpłacona kwota'"
                             [statIcon]="'update'"
-                            [statText]="'ostatnia wprowadzona wpłata: ' + summary.result?.lastDepositDate"
+                            [statText]="'ostatnia wpłata: ' + summary.result?.lastDepositDate"
                             [isLoading]="summary.isFetching">
             {{summary.result?.saved}}<small>zł</small>
           </app-summary-card>
