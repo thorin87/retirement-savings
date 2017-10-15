@@ -1,3 +1,10 @@
+:host {
+  margin: 0 auto;
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
 .app-loader {
   display: inline-block;
   animation: 2s rotate infinite linear;

@@ -13,6 +13,8 @@ declare var $:any;
 })
 export class AppComponent implements OnInit {
 
+  navigationBarVisible = false;
+
   constructor() { }
 
   ngOnInit(): void {
