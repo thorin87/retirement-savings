@@ -9,7 +9,7 @@ import { ChartSeries } from './chart.model';
 
 export class ChartComponent {
 
-  private options: Object;
+  options: Object;
 
   @Input() set chartData(value: any[]){
     // console.log('set chartdata', value);

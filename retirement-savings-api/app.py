@@ -91,7 +91,8 @@ def fundRates(fundId):
 @app.route('/wallet', methods=['GET', 'POST'])
 def wallet():
     if request.method == 'POST':
-        query_string = "INSERT INTO Wallet (Name) VALUES ('{0}')".format(request.json['name'])
+        if 'token' in request.json and check_if_admin(request.json['token']):
+            query_string = "INSERT INTO Wallet (Name) VALUES ('{0}')".format(request.json['name'])
     else:
         query_string = '''SELECT Wallet.Id, Wallet.Name, prod.Name AS ProductName, inst.Name AS Owner, insttype.Name AS OwnerType
         FROM Wallet 
