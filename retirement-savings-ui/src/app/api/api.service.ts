@@ -12,8 +12,8 @@ export class ApiService {
 
   constructor(private http: Http) { }
 
-  getAllAssets(): Observable<any> {
-    return this.http.get(`${environment.apiPath}/allAssets`)
+  getAllAssets(guid: string): Observable<any> {
+    return this.http.get(`${environment.apiPath}/allAssets/${guid}`)
     .map(this.extractData)
     .catch(this.handleError);
   }
@@ -37,8 +37,8 @@ export class ApiService {
     return Observable.throw(errMsg);
   }
 
-  getSummary(): Observable<Summary> {
-    return this.http.get(`${environment.apiPath}/summary`)
+  getSummary(guid: string): Observable<Summary> {
+    return this.http.get(`${environment.apiPath}/summary/${guid}`)
       .map((res: Response) => {
         const body = res.json();
         return <Summary>{
@@ -55,8 +55,8 @@ export class ApiService {
       .catch(this.handleError);
   }
 
-  getWallets(): Observable<Wallet[]> {
-    return this.http.get(`${environment.apiPath}/wallet`)
+  getWallets(guid: string): Observable<Wallet[]> {
+    return this.http.get(`${environment.apiPath}/wallet/${guid}`)
       .map(this.extractData)
       .catch(this.handleError);
   }

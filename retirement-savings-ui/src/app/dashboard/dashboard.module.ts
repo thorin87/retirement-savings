@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { MODULE_COMPONENTS, MODULE_ROUTES } from './dashboard.routes';
+import {dashboardRoutes, MODULE_COMPONENTS, MODULE_ROUTES} from './dashboard.routes';
 import { ChartModule } from 'angular2-highcharts';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { ChartComponent } from '../chart/chart.component';
@@ -8,20 +7,19 @@ import { CommonModule } from "@angular/common";
 import { SummaryCardComponent } from './summary-card/summary-card.component';
 import {HomeComponent} from "./home/home.component";
 import {SpinnerComponent} from "../shared/spinner/spinner.component";
-import { CardComponent } from './card/card.component';
-import { WelcomeMessageComponent } from './welcome-message/welcome-message.component';
+import {RouterModule} from "@angular/router";
 
 export function highchartsFactory() {
   const hc = require('highcharts/highstock');
   const dd = require('highcharts/modules/exporting');
   dd(hc);
+  hc.setOptions({lang: ChartComponent.loadChartPlLang()})
   return hc;
 }
 
 @NgModule({
     imports: [
         CommonModule,
-        // RouterModule.forChild(MODULE_ROUTES),
         ChartModule
     ],
     declarations: [
@@ -41,4 +39,4 @@ export function highchartsFactory() {
     ]
 })
 
-export class DashboardModule{}
+export class DashboardModule {}

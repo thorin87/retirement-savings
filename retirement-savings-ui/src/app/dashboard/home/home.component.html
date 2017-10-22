@@ -4,7 +4,7 @@
           <app-summary-card [color]="'orange'"
                             [icon]="'account_balance_wallet'"
                             [title]="'Całkowita wartość'"
-                            [statIcon]="'update'"
+                            [statIcon]="'access_time'"
                             [statText]="'zaktualizowano ' + summary.result?.lastUpdateInDays + ' dni temu'"
                             [isLoading]="summary.isFetching">
             {{summary.result?.have}}<small>zł</small>
@@ -15,7 +15,7 @@
                             [icon]="'input'"
                             [title]="'Wpłacona kwota'"
                             [statIcon]="'update'"
-                            [statText]="'ostatnia wpłata: ' + summary.result?.lastDepositDate"
+                            [statText]="'ostatnia operacja: ' + (summary.result?.lastDepositDate || '' | date: 'dd.MM.yyyy')"
                             [isLoading]="summary.isFetching">
             {{summary.result?.saved}}<small>zł</small>
           </app-summary-card>

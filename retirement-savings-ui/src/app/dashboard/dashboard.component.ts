@@ -1,9 +1,26 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
+import {isNullOrUndefined} from "util";
 
 @Component({
-    selector: 'dashboard-cmp',
-    moduleId: module.id,
-    templateUrl: 'dashboard.component.html'
+  selector: 'app-dashboard',
+  templateUrl: 'dashboard.component.html'
 })
 
-export class DashboardComponent{}
+export class DashboardComponent implements OnInit {
+
+  welcomeMessageVisible = false;
+  userGuid: string;
+
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    this.userGuid = this.route.snapshot.params['guid'];
+    if (this.userGuid === undefined) {
+      this.userGuid = null;
+    }
+    if (this.userGuid === null || this.userGuid.length === 0) {
+      this.welcomeMessageVisible = true;
+    }
+  }
+}

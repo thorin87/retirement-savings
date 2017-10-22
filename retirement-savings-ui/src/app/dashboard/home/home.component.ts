@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { TableData } from '../table/table.model';
 import {Summary} from '../../api/model/summary.model';
@@ -15,6 +15,8 @@ declare var $: any;
 })
 
 export class HomeComponent implements OnInit {
+    @Input() userGuid: string;
+
     public chartData: AsyncQuery<any>;
     public wallets: AsyncQuery<Wallet[]>;
     public summary: AsyncQuery<Summary>;
@@ -26,8 +28,8 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-      this.apiService.getSummary().first().subscribe(response => this.summary.result = response);
-      this.apiService.getWallets().first().subscribe(response => {
+      this.apiService.getSummary(this.userGuid).first().subscribe(response => this.summary.result = response);
+      this.apiService.getWallets(this.userGuid).first().subscribe(response => {
         response.forEach(wallet =>
           this.apiService.getAssetsInWallet(wallet.Id).first().subscribe(
             assetResp => {
@@ -39,6 +41,6 @@ export class HomeComponent implements OnInit {
         );
         this.wallets.result = response;
       });
-      this.apiService.getAllAssets().first().subscribe(response => this.chartData.result = response);
+      this.apiService.getAllAssets(this.userGuid).first().subscribe(response => this.chartData.result = response);
     }
 }

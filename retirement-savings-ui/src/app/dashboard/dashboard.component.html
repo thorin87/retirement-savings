@@ -1,4 +1,4 @@
 <div class="main-content">
-  <app-welcome-message></app-welcome-message>
-  <app-home></app-home>
+  <app-welcome-message *ngIf="welcomeMessageVisible"></app-welcome-message>
+  <app-home [userGuid]="userGuid"></app-home>
 </div>

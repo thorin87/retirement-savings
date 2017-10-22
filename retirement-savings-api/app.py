@@ -36,7 +36,7 @@ CORS(app)
 
 @app.route("/")
 def main():
-    return "Hello World!"
+    return "http://www.planujemeryture.pl";
 
 @app.route("/token", methods=['GET', 'POST'])
 def token():
@@ -88,18 +88,19 @@ def fundRates(fundId):
         query_string = "SELECT Date, Value FROM Rate WHERE FundId = " + fundId
         return fetchFromDbReturnAsJSON(query_string)
 
-@app.route('/wallet', methods=['GET', 'POST'])
-def wallet():
+@app.route('/wallet/<string:token>', methods=['GET', 'POST'])
+def wallet(token):
     if request.method == 'POST':
         if 'token' in request.json and check_if_admin(request.json['token']):
             query_string = "INSERT INTO Wallet (Name) VALUES ('{0}')".format(request.json['name'])
     else:
+        userId = getUserId(token)
         query_string = '''SELECT Wallet.Id, Wallet.Name, prod.Name AS ProductName, inst.Name AS Owner, insttype.Name AS OwnerType
         FROM Wallet 
         JOIN InvestmentProduct prod ON prod.Id = Wallet.InvestmentProductId
         JOIN FinancialInstitution inst ON prod.FinancialInstitutionId = inst.Id
         JOIN FinancialInstitutionType insttype ON inst.TypeId = insttype.Id
-        WHERE Wallet.UserId = 1'''
+        WHERE Wallet.UserId = {0}'''.format(userId)
         return fetchFromDbReturnAsJSON(query_string)
 
 @app.route('/wallet/<int:walletId>/assets', methods=['GET', 'POST'])
@@ -127,8 +128,8 @@ def walletAssetsHistory(walletId):
     query_string = query_string.format(walletId)
     return fetchFromDbReturnAsJSON(query_string)
 
-@app.route('/allAssets')
-def allAssets():
+@app.route('/allAssets/<string:token>')
+def allAssets(token):
     # assets_query = '''SELECT FundId, OperationDate FROM Asset 
     # JOIN Wallet ON Wallet.Id = Asset.WalletId
     # WHERE Wallet.UserId = 1
@@ -150,7 +151,7 @@ def allAssets():
     #values_at_date = query_db(values_at_date_query, (min_date, ",".join(map(str, fund_ids))))
 
     #return jsonify(values_at_date_query2, values_at_date, (min_date, ",".join(map(str, fund_ids)) ))
-
+    userId = getUserId(token)
     query = '''SELECT DatesToCalculateValue.Date, 
 	ROUND(SUM(Asset.Quantity * (SELECT Value FROM Rate WHERE Date <= DatesToCalculateValue.Date AND FundId = Asset.FundId ORDER BY Date DESC LIMIT 1)), 2) AS Value
     FROM Wallet
@@ -160,48 +161,72 @@ def allAssets():
 	AND OperationDateRate.Date = Asset.OperationDate
     JOIN (SELECT Date FROM Rate GROUP BY Date ORDER BY Date) AS DatesToCalculateValue
 	ON DatesToCalculateValue.Date >= Asset.OperationDate
-    WHERE Wallet.UserId = 1
+    WHERE Wallet.UserId = {0}
     GROUP BY DatesToCalculateValue.Date
-    ORDER BY DatesToCalculateValue.Date'''
+    ORDER BY DatesToCalculateValue.Date'''.format(userId)
     return fetchFromDbReturnAsJSON(query)
 
-@app.route('/summary')
-def summary():
+@app.route('/summary/<string:token>')
+def summary(token):
+    userId = getUserId(token)
+
     money_spent_query = '''SELECT ROUND(SUM(Quantity * Value), 2) as Value
     FROM Asset 
-    JOIN Rate ON Rate.Date = Asset.OperationDate AND Rate.FundId = Asset.FundId'''
-    money_spent = fetchSingle(money_spent_query)
+    JOIN Rate ON Rate.Date = Asset.OperationDate AND Rate.FundId = Asset.FundId
+    JOIN Wallet ON Wallet.Id = Asset.WalletId
+    WHERE Wallet.UserId = {0}'''.format(userId)
+    money_spent = fetchSingleValue(money_spent_query, 0)
 
     current_value_query = '''SELECT ROUND(SUM(Quantity * Value), 2) as Value
     FROM Asset 
     JOIN Rate ON Rate.FundId = Asset.FundId
     JOIN (SELECT FundId, MAX(Date) as MaxDate FROM Rate GROUP BY FundId) AS RateMax
-    ON RateMax.MaxDate = Rate.Date AND RateMax.FundId = Rate.FundId'''
-    current_value = fetchSingle(current_value_query)
+    ON RateMax.MaxDate = Rate.Date AND RateMax.FundId = Rate.FundId
+    JOIN Wallet ON Wallet.Id = Asset.WalletId
+    WHERE Wallet.UserId = {0}'''.format(userId)
+    current_value = fetchSingleValue(current_value_query, 0)
 
-    invest_days_query = '''SELECT DATEDIFF(NOW(), MIN(OperationDate)) FROM Asset JOIN Wallet ON Asset.WalletId = Wallet.Id WHERE Wallet.UserId = 1'''
-    invest_days = fetchSingle(invest_days_query)
+    invest_days_query = '''SELECT DATEDIFF(NOW(), MIN(OperationDate)) FROM Asset JOIN Wallet ON Asset.WalletId = Wallet.Id WHERE Wallet.UserId = {0}'''.format(userId)
+    invest_days = fetchSingleValue(invest_days_query, 0)
 
     lastUpdateInDaysQuery = '''SELECT DATEDIFF(NOW(), MAX(Date)) FROM Rate'''
-    lastUpdateInDays = fetchSingle(lastUpdateInDaysQuery)
+    lastUpdateInDays = fetchSingleValue(lastUpdateInDaysQuery, 0)
 
-    difference = current_value[0] - money_spent[0]
-    earn_per_year = difference * 356 / invest_days[0]
+    lastDepositDateQuery = '''SELECT MAX(OperationDate) as Value
+    FROM Asset 
+    JOIN Wallet ON Wallet.Id = Asset.WalletId
+    WHERE Wallet.UserId = {0}'''.format(userId)
+    lastDepositDate = fetchSingleValue(lastDepositDateQuery, None)
 
-    return jsonify(saved = money_spent[0], 
-    have = current_value[0], 
+    difference = current_value - money_spent
+    earn_per_year = 0
+    percentage = 0
+    meanPercentage = 0
+
+    if invest_days > 0:
+        earn_per_year = difference * 356 / invest_days
+    if current_value > 0:
+        percentage = difference * 100 / current_value
+        meanPercentage = earn_per_year * 100 / current_value
+
+    return jsonify(saved = money_spent, 
+    have = current_value, 
     diff = difference,
-    percentage = difference * 100/current_value[0],
-    meanPercentage = earn_per_year * 100/current_value[0],
-    period = invest_days[0],
-    lastUpdateInDays = lastUpdateInDays[0],
-    lastDepositDate = '09-11-2016')
+    percentage = percentage,
+    meanPercentage = meanPercentage,
+    period = invest_days,
+    lastUpdateInDays = lastUpdateInDays,
+    lastDepositDate = lastDepositDate)
 
 ########## datebase helper method
-def fetchSingle(query):
+def fetchSingleValue(query, default):
     cursor = mysql.connection.cursor()
     cursor.execute(query)
-    return cursor.fetchone()
+    row = cursor.fetchone()
+    if row != None and row[0] != None:
+        return row[0]
+    else:
+        return default
 
 def query_db(query, args=(), one=False):
     cur = mysql.connection.cursor()
@@ -224,16 +249,16 @@ def insertToDb(query):
     mysql.connection.commit()
     return cursor.lastrowid
 
-########## 
-#TODO dodać pobieranie tokena z settings a potem z url/cookie
-def getUserId():
-    return 1
+##########
+def getUserId(token):
+    query = "SELECT Id FROM User WHERE Token = '{0}'".format(token)
+    userId = fetchSingleValue(query, 1)
+    return userId
 
 def check_if_admin(token):
-    query = "SELECT Admin FROM User WHERE Token = '{0}'"
-    query = query.format(token)
-    isAdmin = fetchSingle(query)
-    return isAdmin[0] == 1
+    query = "SELECT Admin FROM User WHERE Token = '{0}'".format(token)
+    isAdmin = fetchSingleValue(query, 0)
+    return isAdmin == 1
 
 if __name__ == '__main__':
     app.run(debug=True)

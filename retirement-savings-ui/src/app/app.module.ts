@@ -15,6 +15,7 @@ import { FooterModule } from './shared/footer/footer.module';
 import { NavbarModule} from './shared/navbar/navbar.module';
 import {WelcomeMessageComponent} from "./dashboard/welcome-message/welcome-message.component";
 import {CardComponent} from "./dashboard/card/card.component";
+import {dashboardRoutes} from "./dashboard/dashboard.routes";
 
 @NgModule({
   declarations: [
@@ -25,11 +26,11 @@ import {CardComponent} from "./dashboard/card/card.component";
   ],
   imports: [
     BrowserModule,
+    RouterModule.forRoot(dashboardRoutes),
     DashboardModule,
     SidebarModule,
     NavbarModule,
     FooterModule,
-    // RouterModule.forRoot([]),
     FormsModule,
     HttpModule
   ],

@@ -19,6 +19,11 @@ export const MODULE_ROUTES: Route[] = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 
+export const dashboardRoutes: Route[] = [
+  { path: ':guid', component: DashboardComponent },
+  { path: '', component: DashboardComponent }
+]
+
 export const MODULE_COMPONENTS = [
     HomeComponent,
     UserComponent,
