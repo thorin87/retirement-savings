@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDownloader", "DataDownloader\DataDownloader.csproj", "{DDBE0A30-A94E-4D99-8124-56B3C8D50633}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunDll", "RunDll\RunDll.csproj", "{240835EC-D418-4CF9-9336-4515095846C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiConnector", "ApiConnector\ApiConnector.csproj", "{941398D1-5266-4576-9899-A3FC9786C0BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDownloaderService", "DataDownloaderService\DataDownloaderService.csproj", "{69576019-F2FF-4986-8C83-5519001855AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{941398D1-5266-4576-9899-A3FC9786C0BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{941398D1-5266-4576-9899-A3FC9786C0BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{941398D1-5266-4576-9899-A3FC9786C0BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69576019-F2FF-4986-8C83-5519001855AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69576019-F2FF-4986-8C83-5519001855AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69576019-F2FF-4986-8C83-5519001855AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69576019-F2FF-4986-8C83-5519001855AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
