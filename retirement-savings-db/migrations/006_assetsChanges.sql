@@ -11,3 +11,13 @@ CHANGE COLUMN `FundId` `FundId` INT(11) NULL ;
 
 ALTER TABLE `Rate` 
 ADD INDEX `DateAndFundId` (`Date` ASC, `FundId` ASC);
+
+ALTER TABLE `thorin87_myretirement`.`Asset` 
+CHANGE COLUMN `WalletId` `WalletId` INT(11) NOT NULL AFTER `Id`,
+CHANGE COLUMN `FundId` `FundId` INT(11) NULL DEFAULT NULL AFTER `WalletId`,
+ADD COLUMN `IsRecurringPayment` TINYINT(1) NOT NULL DEFAULT 0 AFTER `OperationFee`,
+ADD COLUMN `RecurringPaymentAmount` DECIMAL(10,2) NULL AFTER `IsRecurringPayment`,
+ADD COLUMN `RecuuringPaymentDays` INT NULL AFTER `RecurringPaymentAmount`;
+
+ALTER TABLE `thorin87_myretirement`.`Asset` 
+CHANGE COLUMN `RecuuringPaymentDays` `RecuuringPaymentTimesInYear` INT(11) NULL DEFAULT NULL ;

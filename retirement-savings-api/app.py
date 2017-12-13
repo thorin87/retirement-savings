@@ -97,9 +97,9 @@ def wallet(token):
         userId = getUserId(token)
         query_string = '''SELECT Wallet.Id, Wallet.Name, prod.Name AS ProductName, inst.Name AS Owner, insttype.Name AS OwnerType
         FROM Wallet 
-        JOIN InvestmentProduct prod ON prod.Id = Wallet.InvestmentProductId
-        JOIN FinancialInstitution inst ON prod.FinancialInstitutionId = inst.Id
-        JOIN FinancialInstitutionType insttype ON inst.TypeId = insttype.Id
+        LEFT JOIN InvestmentProduct prod ON prod.Id = Wallet.InvestmentProductId
+        LEFT JOIN FinancialInstitution inst ON inst.Id = Wallet.FinancialInstitutionId
+		LEFT JOIN FinancialInstitutionType insttype ON inst.TypeId = insttype.Id
         WHERE Wallet.UserId = {0}'''.format(userId)
         return fetchFromDbReturnAsJSON(query_string)
 

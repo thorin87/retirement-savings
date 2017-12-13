@@ -4,7 +4,7 @@
           <app-summary-card [color]="'orange'"
                             [icon]="'account_balance_wallet'"
                             [title]="'Całkowita wartość'"
-                            [statIcon]="'access_time'"
+                            [statIcon]="'update'"
                             [statText]="'zaktualizowano ' + summary.result?.lastUpdateInDays + ' dni temu'"
                             [isLoading]="summary.isFetching">
             {{summary.result?.have}}<small>zł</small>
@@ -14,15 +14,15 @@
           <app-summary-card [color]="'purple'"
                             [icon]="'input'"
                             [title]="'Wpłacona kwota'"
-                            [statIcon]="'update'"
+                            [statIcon]="'access_time'"
                             [statText]="'ostatnia operacja: ' + (summary.result?.lastDepositDate || '' | date: 'dd.MM.yyyy')"
                             [isLoading]="summary.isFetching">
             {{summary.result?.saved}}<small>zł</small>
           </app-summary-card>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-6">
-          <app-summary-card [color]="'green'"
-                            [icon]="'trending_up'"
+          <app-summary-card [color]="summary.result?.diff > 0 ? 'green' : 'red'"
+                            [icon]="summary.result?.diff > 0 ? 'trending_up' : 'trending_down'"
                             [title]="'Zysk'"
                             [statIcon]="'date_range'"
                             [statText]="'od ' + summary.result?.period + ' dni'"
@@ -37,7 +37,7 @@
                             [statIcon]="'timeline'"
                             [statText]="'średnia roczna zmiana'"
                             [isLoading]="summary.isFetching">
-            +{{summary.result?.meanPercentage | number:'1.2-2'}}<small>%</small>
+            {{summary.result?.meanPercentage | number:'1.2-2'}}<small>%</small>
           </app-summary-card>
         </div>
     </div>
@@ -50,7 +50,14 @@
                 </div>
                 <div class="card-content">
                     <h4 class="title">Całkowita wartość zgromadzonych środków</h4>
-                    <p class="category"><span class="text-success"><i class="fa fa-long-arrow-up"></i> {{summary.result?.percentage | number:'1.2-2'}}%  </span> zysku ponad wpłacone środki</p>
+                    <p class="category">
+                      <span [ngClass]="{'text-success': summary.result?.percentage >= 0, 'text-danger': summary.result?.percentage < 0}">
+                        <i class="fa fa-long-arrow-up" *ngIf="summary.result?.percentage >= 0"></i>
+                        <i class="fa fa-long-arrow-down" *ngIf="summary.result?.percentage < 0"></i>
+                        {{summary.result?.percentage | number:'1.2-2'}}%
+                      </span>
+                      zysku ponad wpłacone środki
+                    </p>
                 </div>
                 <div class="card-footer" *ngIf="false">
                     <div class="stats">
@@ -62,6 +69,6 @@
     </div>
 
     <div class="row">
-        <app-table *ngFor="let wallet of wallets.result" [title]="'Twój portfel ' + wallet.Name" [subtitle]="wallet.ProductName + ' w ' + wallet.Owner" [data]="wallet.Assets"></app-table>
+        <app-table *ngFor="let wallet of wallets.result" [title]="'Twój portfel ' + wallet.Name" [productName]="wallet.ProductName" [productOwner]="wallet.Owner" [data]="wallet.Assets"></app-table>
     </div>
 </div>
